@@ -1,10 +1,18 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ShieldAlert, CheckCircle, ChevronRight, User, Mail, Hash, ArrowLeft, Lock } from 'lucide-react';
 
 export default function CandidateLogin() {
+    return (
+        <Suspense>
+            <CandidateLoginInner />
+        </Suspense>
+    );
+}
+
+function CandidateLoginInner() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
