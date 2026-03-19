@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 set -e
 
+# ── Ensure we're using Node >= 20 via nvm ──────────────────────────────────────
+export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+    source "$NVM_DIR/nvm.sh"
+    nvm use 20 2>/dev/null || nvm install 20
+else
+    echo "Warning: nvm not found. Make sure Node >= 20 is active."
+fi
+
+NODE_BIN=$(which node)
+echo "==> Using Node: $NODE_BIN ($(node -v))"
+
 echo "==> Installing dependencies..."
 npm install
 
@@ -8,8 +20,6 @@ echo "==> Building Next.js app..."
 npm run build
 
 echo "==> Seeding database with sample questions..."
-# DB tables are auto-created when the app first imports db.js (on build/start).
-# Run seed scripts to populate the question pool and sample campaigns.
 node --input-type=module <<'EOF'
 import('./migrateAndSeed.js').catch(e => { console.error(e); process.exit(1); });
 EOF
@@ -20,7 +30,7 @@ EOF
 
 echo "==> Starting app with PM2 on port 3131..."
 pm2 delete zuper-hire 2>/dev/null || true
-pm2 start ecosystem.config.cjs
+NODE_PATH="$NODE_BIN" pm2 start ecosystem.config.cjs
 pm2 save
 
 echo ""
