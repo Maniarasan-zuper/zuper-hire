@@ -3,12 +3,15 @@ set -e
 
 # ── Ensure we're using Node >= 20 via nvm ──────────────────────────────────────
 export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
-if [ -s "$NVM_DIR/nvm.sh" ]; then
+if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+    echo "==> Installing nvm..."
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
     source "$NVM_DIR/nvm.sh"
-    nvm use 20 2>/dev/null || nvm install 20
 else
-    echo "Warning: nvm not found. Make sure Node >= 20 is active."
+    source "$NVM_DIR/nvm.sh"
 fi
+nvm install 20
+nvm use 20
 
 NODE_BIN=$(which node)
 echo "==> Using Node: $NODE_BIN ($(node -v))"
