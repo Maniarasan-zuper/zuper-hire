@@ -16,7 +16,8 @@ nvm use 20
 NODE_BIN=$(which node)
 echo "==> Using Node: $NODE_BIN ($(node -v))"
 
-echo "==> Installing dependencies..."
+echo "==> Installing dependencies (clean install for Node 20)..."
+rm -rf node_modules
 npm install
 
 echo "==> Building Next.js app..."
