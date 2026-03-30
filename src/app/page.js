@@ -57,8 +57,8 @@ export default function Home() {
                 position: 'sticky', top: 0, zIndex: 100
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <img src="/zuper_logo.png" alt="Zuper" style={{ height: 32, width: 'auto' }} className="dark-logo" />
-                    <img src="/zuper_logo_light.png" alt="Zuper" style={{ height: 32, width: 'auto' }} className="light-logo" />
+                    <img src={`${BASE_PATH}/zuper_logo.png`} alt="Zuper" style={{ height: 32, width: 'auto' }} className="dark-logo" />
+                    <img src={`${BASE_PATH}/zuper_logo_light.png`} alt="Zuper" style={{ height: 32, width: 'auto' }} className="light-logo" />
                     <div>
                         <span style={{ fontWeight: 800, fontSize: 18, letterSpacing: '-0.5px' }}>Zuper Hire</span>
                         <span style={{ fontSize: 11, opacity: 0.4, marginLeft: 8, fontWeight: 500 }}>Internal Platform</span>
@@ -94,8 +94,8 @@ export default function Home() {
 
                 {/* Zuper logo prominent */}
                 <div style={{ marginBottom: 28 }}>
-                    <img src="/zuper_logo.png" alt="Zuper" style={{ height: 48, width: 'auto', margin: '0 auto' }} className="dark-logo mx-auto" />
-                    <img src="/zuper_logo_light.png" alt="Zuper" style={{ height: 48, width: 'auto', margin: '0 auto' }} className="light-logo mx-auto" />
+                    <img src={`${BASE_PATH}/zuper_logo.png`} alt="Zuper" style={{ height: 48, width: 'auto', margin: '0 auto' }} className="dark-logo mx-auto" />
+                    <img src={`${BASE_PATH}/zuper_logo_light.png`} alt="Zuper" style={{ height: 48, width: 'auto', margin: '0 auto' }} className="light-logo mx-auto" />
                 </div>
 
                 <div className="hero-tag">
@@ -145,8 +145,8 @@ export default function Home() {
                     borderRadius: 14, maxWidth: 680, margin: '52px auto 0',
                     display: 'flex', alignItems: 'center', gap: 20, textAlign: 'left'
                 }}>
-                    <img src="/zuper_logo.png" alt="Zuper" style={{ height: 36, width: 'auto', flexShrink: 0 }} className="dark-logo" />
-                    <img src="/zuper_logo_light.png" alt="Zuper" style={{ height: 36, width: 'auto', flexShrink: 0 }} className="light-logo" />
+                    <img src={`${BASE_PATH}/zuper_logo.png`} alt="Zuper" style={{ height: 36, width: 'auto', flexShrink: 0 }} className="dark-logo" />
+                    <img src={`${BASE_PATH}/zuper_logo_light.png`} alt="Zuper" style={{ height: 36, width: 'auto', flexShrink: 0 }} className="light-logo" />
                     <div>
                         <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>About Zuper</div>
                         <div style={{ fontSize: 13, opacity: 0.6, lineHeight: 1.6 }}>
@@ -181,8 +181,8 @@ export default function Home() {
                 background: 'rgba(var(--primary-rgb), 0.02)'
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 10 }}>
-                    <img src="/zuper_logo.png" alt="Zuper" style={{ height: 22, width: 'auto' }} className="dark-logo" />
-                    <img src="/zuper_logo_light.png" alt="Zuper" style={{ height: 22, width: 'auto' }} className="light-logo" />
+                    <img src={`${BASE_PATH}/zuper_logo.png`} alt="Zuper" style={{ height: 22, width: 'auto' }} className="dark-logo" />
+                    <img src={`${BASE_PATH}/zuper_logo_light.png`} alt="Zuper" style={{ height: 22, width: 'auto' }} className="light-logo" />
                     <span style={{ fontWeight: 700, fontSize: 14 }}>Zuper Hire</span>
                     <span style={{ opacity: 0.3, fontSize: 12 }}>· Internal Tool · Not for public use</span>
                 </div>

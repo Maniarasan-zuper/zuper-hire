@@ -137,8 +137,8 @@ function CandidateLoginInner() {
                 {/* Brand */}
                 <div style={{ textAlign: 'center', marginBottom: 32 }}>
                     <div style={{ margin: '0 auto 16px' }}>
-                        <img src="/zuper_logo.png" alt="Zuper Hire" style={{ height: 48, width: 'auto' }} className="dark-logo mx-auto" />
-                        <img src="/zuper_logo_light.png" alt="Zuper Hire" style={{ height: 48, width: 'auto' }} className="light-logo mx-auto" />
+                        <img src={`${BASE_PATH}/zuper_logo.png`} alt="Zuper Hire" style={{ height: 48, width: 'auto' }} className="dark-logo mx-auto" />
+                        <img src={`${BASE_PATH}/zuper_logo_light.png`} alt="Zuper Hire" style={{ height: 48, width: 'auto' }} className="light-logo mx-auto" />
                     </div>
                     <h1 style={{
                         fontSize: 28, fontWeight: 800, letterSpacing: '-0.8px',

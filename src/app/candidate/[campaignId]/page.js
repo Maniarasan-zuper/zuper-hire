@@ -679,8 +679,8 @@ export default function CandidateInterview({ params }) {
             <header className="editor-header">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <img src="/zuper_logo.png" alt="Zuper Hire" style={{ height: 22, width: 'auto' }} className="dark-logo" />
-                        <img src="/zuper_logo_light.png" alt="Zuper Hire" style={{ height: 22, width: 'auto' }} className="light-logo" />
+                        <img src={`${BASE_PATH}/zuper_logo.png`} alt="Zuper Hire" style={{ height: 22, width: 'auto' }} className="dark-logo" />
+                        <img src={`${BASE_PATH}/zuper_logo_light.png`} alt="Zuper Hire" style={{ height: 22, width: 'auto' }} className="light-logo" />
                         <span style={{ fontWeight: 800, fontSize: 17, letterSpacing: '-0.5px' }}>Zuper Hire</span>
                     </div>
 

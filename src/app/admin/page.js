@@ -109,8 +109,8 @@ export default function AdminDashboard() {
                 <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <img src="/zuper_logo.png" alt="Zuper Hire" style={{ height: 36, width: 'auto' }} className="dark-logo" />
-                            <img src="/zuper_logo_light.png" alt="Zuper Hire" style={{ height: 36, width: 'auto' }} className="light-logo" />
+                            <img src={`${BASE_PATH}/zuper_logo.png`} alt="Zuper Hire" style={{ height: 36, width: 'auto' }} className="dark-logo" />
+                            <img src={`${BASE_PATH}/zuper_logo_light.png`} alt="Zuper Hire" style={{ height: 36, width: 'auto' }} className="light-logo" />
                         </div>
                         <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.8px', background: 'linear-gradient(135deg, var(--foreground), var(--primary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                             Zuper Hire Portal
