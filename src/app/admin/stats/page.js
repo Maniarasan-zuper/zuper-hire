@@ -1,4 +1,5 @@
 'use client';
+import { BASE_PATH } from '@/lib/api';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
@@ -87,7 +88,7 @@ export default function StatsPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('/api/admin/stats')
+        fetch(`${BASE_PATH}/api/admin/stats`)
             .then(r => r.json())
             .then(d => { setStats(d); setLoading(false); })
             .catch(() => setLoading(false));

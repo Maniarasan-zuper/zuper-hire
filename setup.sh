@@ -20,6 +20,14 @@ echo "==> Installing dependencies (clean install for Node 20)..."
 rm -rf node_modules
 npm install
 
+echo "==> Configuring environment..."
+if [ ! -f .env.local ]; then
+    echo "NEXT_PUBLIC_BASE_PATH=/hire" > .env.local
+    echo "    Created .env.local with NEXT_PUBLIC_BASE_PATH=/hire"
+else
+    echo "    .env.local already exists, skipping."
+fi
+
 echo "==> Building Next.js app..."
 npm run build
 

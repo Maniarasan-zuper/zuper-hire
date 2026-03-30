@@ -1,4 +1,6 @@
 'use client';
+import { BASE_PATH } from '@/lib/api';
+import { BASE_PATH } from '@/lib/api';
 import { useState, useEffect, useRef, use } from 'react';
 import Link from 'next/link';
 import {
@@ -28,7 +30,7 @@ export default function LiveMonitoring({ params }) {
     // ── Fetch list of live candidates (heartbeat-based) ──────────
     const fetchLiveCandidates = async () => {
         try {
-            const res = await fetch(`/api/admin/campaigns/${campaignId}/live`);
+            const res = await fetch(`${BASE_PATH}/api/admin/campaigns/${campaignId}/live`);
             const data = await res.json();
             if (data.candidates) setActiveCandidates(data.candidates);
         } catch { }
@@ -67,7 +69,7 @@ export default function LiveMonitoring({ params }) {
 
         pc.onicecandidate = ({ candidate }) => {
             if (candidate) {
-                fetch(`/api/admin/campaigns/${campaignId}/signal`, {
+                fetch(`${BASE_PATH}/api/admin/campaigns/${campaignId}/signal`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ type: 'ice', candidateId, ice: candidate, from: 'admin' })
@@ -90,7 +92,7 @@ export default function LiveMonitoring({ params }) {
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
 
-        await fetch(`/api/admin/campaigns/${campaignId}/signal`, {
+        await fetch(`${BASE_PATH}/api/admin/campaigns/${campaignId}/signal`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: 'offer', candidateId, sdp: offer })
@@ -99,7 +101,7 @@ export default function LiveMonitoring({ params }) {
     };
 
     useEffect(() => {
-        const sse = new EventSource(`/api/admin/campaigns/${campaignId}/signal?role=admin`);
+        const sse = new EventSource(`${BASE_PATH}/api/admin/campaigns/${campaignId}/signal?role=admin`);
         sseRef.current = sse;
 
         sse.onmessage = async (e) => {
@@ -129,7 +131,7 @@ export default function LiveMonitoring({ params }) {
 
     // ── Poll list of active candidates + auto-connect ────────────
     useEffect(() => {
-        fetch(`/api/admin/campaigns/${campaignId}`)
+        fetch(`${BASE_PATH}/api/admin/campaigns/${campaignId}`)
             .then(r => r.json())
             .then(d => setCampaign(d.campaign));
 

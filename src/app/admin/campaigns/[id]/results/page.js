@@ -1,4 +1,5 @@
 'use client';
+import { BASE_PATH } from '@/lib/api';
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 import {
@@ -109,14 +110,14 @@ function CommentsPanel({ candidateId, show: showPanel }) {
 
     useEffect(() => {
         if (!showPanel) return;
-        fetch(`/api/admin/candidates/${candidateId}/comments`)
+        fetch(`${BASE_PATH}/api/admin/candidates/${candidateId}/comments`)
             .then(r => r.json()).then(d => setComments(d.comments || []));
     }, [candidateId, showPanel]);
 
     const addComment = async () => {
         if (!text.trim()) return;
         setLoading(true);
-        const res = await fetch(`/api/admin/candidates/${candidateId}/comments`, {
+        const res = await fetch(`${BASE_PATH}/api/admin/candidates/${candidateId}/comments`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ comment: text })
@@ -127,7 +128,7 @@ function CommentsPanel({ candidateId, show: showPanel }) {
     };
 
     const deleteComment = async (commentId) => {
-        await fetch(`/api/admin/candidates/${candidateId}/comments`, {
+        await fetch(`${BASE_PATH}/api/admin/candidates/${candidateId}/comments`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ commentId })
@@ -177,7 +178,7 @@ function MoveToCampaignModal({ candidate, onClose, onMoved }) {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        fetch('/api/admin/campaigns').then(r => r.json()).then(d => {
+        fetch(`${BASE_PATH}/api/admin/campaigns`).then(r => r.json()).then(d => {
             setCampaigns((d.campaigns || []).filter(c => c.status !== 'archived' && c.id !== candidate.campaignId));
         });
     }, [candidate.campaignId]);
@@ -185,7 +186,7 @@ function MoveToCampaignModal({ candidate, onClose, onMoved }) {
     const move = async () => {
         if (!selected) return;
         setLoading(true); setError('');
-        const res = await fetch(`/api/admin/candidates/${candidate.id}/move`, {
+        const res = await fetch(`${BASE_PATH}/api/admin/candidates/${candidate.id}/move`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ targetCampaignId: selected })
@@ -227,7 +228,7 @@ function CandidateHistoryModal({ email, onClose }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch(`/api/admin/candidates/history?email=${encodeURIComponent(email)}`)
+        fetch(`${BASE_PATH}/api/admin/candidates/history?email=${encodeURIComponent(email)}`)
             .then(r => r.json()).then(d => { setData(d); setLoading(false); });
     }, [email]);
 
@@ -302,7 +303,7 @@ function CandidateCard({ candidate, submissions, rank, campaignId, onUpdate, sho
 
     const loadScreenshots = async () => {
         setLoadingShots(true);
-        const res = await fetch(`/api/admin/candidates/${candidate.id}/screenshots`);
+        const res = await fetch(`${BASE_PATH}/api/admin/candidates/${candidate.id}/screenshots`);
         const data = await res.json();
         setScreenshots(data.screenshots || []);
         setLoadingShots(false);
@@ -311,7 +312,7 @@ function CandidateCard({ candidate, submissions, rank, campaignId, onUpdate, sho
     const toggleEligible = async () => {
         const next = !eligible;
         setEligible(next);
-        await fetch(`/api/admin/candidates/${candidate.id}/eligible`, {
+        await fetch(`${BASE_PATH}/api/admin/candidates/${candidate.id}/eligible`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ eligible: next })
@@ -459,8 +460,8 @@ export default function CampaignResults({ params }) {
 
     useEffect(() => {
         Promise.all([
-            fetch(`/api/admin/campaigns/${id}`).then(r => r.json()),
-            fetch(`/api/admin/campaigns/${id}/submissions`).then(r => r.json()),
+            fetch(`${BASE_PATH}/api/admin/campaigns/${id}`).then(r => r.json()),
+            fetch(`${BASE_PATH}/api/admin/campaigns/${id}/submissions`).then(r => r.json()),
         ]).then(([campData, subData]) => {
             if (campData.campaign) setCampaign(campData.campaign);
             const subs = subData.submissions || [];

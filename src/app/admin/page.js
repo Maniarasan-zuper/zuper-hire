@@ -1,4 +1,5 @@
 'use client';
+import { BASE_PATH } from '@/lib/api';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -47,12 +48,12 @@ export default function AdminDashboard() {
     const { toasts, show } = useToast();
 
     useEffect(() => {
-        fetch('/api/auth/me')
+        fetch(`${BASE_PATH}/api/auth/me`)
             .then(r => r.json())
             .then(d => {
                 if (!d.admin) { router.replace('/admin/login'); return; }
                 setMe(d.admin);
-                fetch('/api/admin/campaigns')
+                fetch(`${BASE_PATH}/api/admin/campaigns`)
                     .then(res => res.json())
                     .then(data => setCampaigns(data.campaigns || []));
             })
@@ -64,7 +65,7 @@ export default function AdminDashboard() {
         if (!name.trim()) return;
         setCreating(true);
         try {
-            const res = await fetch('/api/admin/campaigns', {
+            const res = await fetch(`${BASE_PATH}/api/admin/campaigns`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, duration: parseInt(duration) || 60, proctoring })
@@ -82,7 +83,7 @@ export default function AdminDashboard() {
         e.stopPropagation();
         e.preventDefault();
         try {
-            const res = await fetch(`/api/admin/campaigns/${campId}/clone`, { method: 'POST' });
+            const res = await fetch(`${BASE_PATH}/api/admin/campaigns/${campId}/clone`, { method: 'POST' });
             const data = await res.json();
             if (data.newId) {
                 router.push(`/admin/campaigns/${data.newId}`);
@@ -142,7 +143,7 @@ export default function AdminDashboard() {
                     )}
                     <ThemeToggle />
                     <button
-                        onClick={async () => { await fetch('/api/auth/logout', { method: 'POST' }); router.replace('/admin/login'); }}
+                        onClick={async () => { await fetch(`${BASE_PATH}/api/auth/logout`, { method: 'POST' }); router.replace('/admin/login'); }}
                         className="button outline"
                         style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#f87171', borderColor: 'rgba(239,68,68,0.3)' }}
                     >

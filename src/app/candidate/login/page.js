@@ -1,4 +1,5 @@
 'use client';
+import { BASE_PATH } from '@/lib/api';
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -49,7 +50,7 @@ function CandidateLoginInner() {
         }
         setPreviewLoading(true);
         try {
-            const res = await fetch(`/api/admin/campaigns/${id}`);
+            const res = await fetch(`${BASE_PATH}/api/admin/campaigns/${id}`);
             const data = await res.json();
             if (data.campaign) {
                 setCampaignPreview(data.campaign);
@@ -94,7 +95,7 @@ function CandidateLoginInner() {
         setError('');
         setLoading(true);
         try {
-            const res = await fetch('/api/candidate/login', {
+            const res = await fetch(`${BASE_PATH}/api/candidate/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form)

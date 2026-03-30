@@ -1,4 +1,5 @@
 'use client';
+import { BASE_PATH } from '@/lib/api';
 import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 import {
@@ -394,7 +395,7 @@ export default function CampaignManage({ params }) {
     });
 
     const fetchData = async () => {
-        fetch(`/api/admin/campaigns/${id}`).then(r => r.json()).then(d => {
+        fetch(`${BASE_PATH}/api/admin/campaigns/${id}`).then(r => r.json()).then(d => {
             if (d.campaign) {
                 setCampaign(d.campaign);
                 setRandomize(!!d.campaign.randomize_questions);
@@ -404,9 +405,9 @@ export default function CampaignManage({ params }) {
                 } catch { setDiffMix({ Easy: 0, Medium: 0, Hard: 0 }); }
             }
         });
-        fetch(`/api/admin/campaigns/${id}/questions`).then(r => r.json()).then(d => setQuestions(d.questions || []));
-        fetch('/api/admin/pool').then(r => r.json()).then(d => setPool(d.pool || []));
-        fetch(`/api/admin/campaigns/${id}/submissions`).then(r => r.json()).then(d => {
+        fetch(`${BASE_PATH}/api/admin/campaigns/${id}/questions`).then(r => r.json()).then(d => setQuestions(d.questions || []));
+        fetch(`${BASE_PATH}/api/admin/pool`).then(r => r.json()).then(d => setPool(d.pool || []));
+        fetch(`${BASE_PATH}/api/admin/campaigns/${id}/submissions`).then(r => r.json()).then(d => {
             setSubmissions(d.submissions || []);
             const map = {};
             (d.submissions || []).forEach(s => { map[s.candidate_id] = { id: s.candidate_id, name: s.name, email: s.email }; });
@@ -416,14 +417,14 @@ export default function CampaignManage({ params }) {
     };
 
     const loadCandidates = () => {
-        fetch(`/api/admin/campaigns/${id}/candidates`)
+        fetch(`${BASE_PATH}/api/admin/campaigns/${id}/candidates`)
             .then(r => r.json())
             .then(d => setPreregCandidates(d.candidates || []));
     };
 
     const addCandidate = async (e) => {
         e.preventDefault();
-        const res = await fetch(`/api/admin/campaigns/${id}/candidates`, {
+        const res = await fetch(`${BASE_PATH}/api/admin/campaigns/${id}/candidates`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newCandidate)
@@ -457,7 +458,7 @@ export default function CampaignManage({ params }) {
 
     const sendEmail = async (candidateId) => {
         setEmailSending(prev => ({ ...prev, [candidateId]: true }));
-        const res = await fetch(`/api/admin/candidates/${candidateId}/send-email`, {
+        const res = await fetch(`${BASE_PATH}/api/admin/candidates/${candidateId}/send-email`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ baseUrl: window.location.origin })
@@ -469,7 +470,7 @@ export default function CampaignManage({ params }) {
     };
 
     const resetCandidate = async (candidateId) => {
-        await fetch(`/api/admin/candidates/${candidateId}/reset`, {
+        await fetch(`${BASE_PATH}/api/admin/candidates/${candidateId}/reset`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ reassignQuestions: resetReassign })
@@ -482,7 +483,7 @@ export default function CampaignManage({ params }) {
 
     const cloneCampaign = async () => {
         setCloning(true);
-        const res = await fetch(`/api/admin/campaigns/${id}/clone`, { method: 'POST' });
+        const res = await fetch(`${BASE_PATH}/api/admin/campaigns/${id}/clone`, { method: 'POST' });
         const data = await res.json();
         setCloning(false);
         if (res.ok && data.id) {
@@ -531,7 +532,7 @@ export default function CampaignManage({ params }) {
             }
         }
 
-        const res = await fetch(`/api/admin/campaigns/${id}`, {
+        const res = await fetch(`${BASE_PATH}/api/admin/campaigns/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -564,7 +565,7 @@ export default function CampaignManage({ params }) {
                 payload.default_code = '';
             }
 
-            const res = await fetch(`/api/admin/campaigns/${id}/questions`, {
+            const res = await fetch(`${BASE_PATH}/api/admin/campaigns/${id}/questions`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
@@ -580,7 +581,7 @@ export default function CampaignManage({ params }) {
     };
 
     const addFromPool = async (poolId) => {
-        const res = await fetch(`/api/admin/campaigns/${id}/add-from-pool`, {
+        const res = await fetch(`${BASE_PATH}/api/admin/campaigns/${id}/add-from-pool`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ poolId })
         });
@@ -588,7 +589,7 @@ export default function CampaignManage({ params }) {
     };
 
     const deleteQuestion = async (questionId) => {
-        const res = await fetch(`/api/admin/campaigns/${id}/questions/${questionId}`, { method: 'DELETE' });
+        const res = await fetch(`${BASE_PATH}/api/admin/campaigns/${id}/questions/${questionId}`, { method: 'DELETE' });
         if (res.ok) { setQuestions(prev => prev.filter(q => q.id !== questionId)); show('Question removed.', 'info'); }
         else show('Failed to delete question.', 'error');
         setDeleteQuestionId(null);
@@ -597,7 +598,7 @@ export default function CampaignManage({ params }) {
     const toggleStatus = async () => {
         if (!campaign) return;
         const newStatus = campaign.status === 'live' ? 'archived' : 'live';
-        const res = await fetch(`/api/admin/campaigns/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: newStatus }) });
+        const res = await fetch(`${BASE_PATH}/api/admin/campaigns/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: newStatus }) });
         const data = await res.json();
         if (res.ok) {
             setCampaign({ ...campaign, status: newStatus });

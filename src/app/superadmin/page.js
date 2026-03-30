@@ -1,4 +1,5 @@
 'use client';
+import { BASE_PATH } from '@/lib/api';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -43,7 +44,7 @@ export default function SuperAdminDashboard() {
     const { toasts, show } = useToast();
 
     useEffect(() => {
-        fetch('/api/auth/me')
+        fetch(`${BASE_PATH}/api/auth/me`)
             .then(r => r.json())
             .then(d => {
                 if (!d.admin || d.admin.role !== 'superadmin') {
@@ -51,7 +52,7 @@ export default function SuperAdminDashboard() {
                     return;
                 }
                 setMe(d.admin);
-                return fetch('/api/superadmin/admins').then(r => r.json());
+                return fetch(`${BASE_PATH}/api/superadmin/admins`).then(r => r.json());
             })
             .then(d => { if (d?.admins) setAdmins(d.admins); })
             .catch(() => router.replace('/admin/login'))
@@ -60,7 +61,7 @@ export default function SuperAdminDashboard() {
 
     const addAdmin = async (e) => {
         e.preventDefault();
-        const res = await fetch('/api/superadmin/admins', {
+        const res = await fetch(`${BASE_PATH}/api/superadmin/admins`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newAdmin)
         });
@@ -69,11 +70,11 @@ export default function SuperAdminDashboard() {
         show('Admin added successfully!', 'success');
         setNewAdmin({ username: '', password: '' });
         setShowAdd(false);
-        fetch('/api/superadmin/admins').then(r => r.json()).then(d => setAdmins(d.admins || []));
+        fetch(`${BASE_PATH}/api/superadmin/admins`).then(r => r.json()).then(d => setAdmins(d.admins || []));
     };
 
     const deleteAdmin = async (id) => {
-        const res = await fetch(`/api/superadmin/admins/${id}`, { method: 'DELETE' });
+        const res = await fetch(`${BASE_PATH}/api/superadmin/admins/${id}`, { method: 'DELETE' });
         const data = await res.json();
         if (!res.ok) { show(data.error || 'Failed', 'error'); return; }
         setAdmins(prev => prev.filter(a => a.id !== id));
@@ -83,7 +84,7 @@ export default function SuperAdminDashboard() {
 
     const resetPassword = async (id) => {
         if (!newPassword.trim()) return;
-        const res = await fetch(`/api/superadmin/admins/${id}`, {
+        const res = await fetch(`${BASE_PATH}/api/superadmin/admins/${id}`, {
             method: 'PUT', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password: newPassword })
         });
@@ -94,7 +95,7 @@ export default function SuperAdminDashboard() {
     };
 
     const logout = async () => {
-        await fetch('/api/auth/logout', { method: 'POST' });
+        await fetch(`${BASE_PATH}/api/auth/logout`, { method: 'POST' });
         router.replace('/admin/login');
     };
 

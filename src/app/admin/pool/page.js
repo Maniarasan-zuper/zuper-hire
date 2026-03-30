@@ -1,4 +1,5 @@
 'use client';
+import { BASE_PATH } from '@/lib/api';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Database, Plus, Trash2, CheckCircle, AlertTriangle, X, ArrowLeft, Pencil, Eye, TestTube, FileCode2, Save } from 'lucide-react';
@@ -377,7 +378,7 @@ export default function PoolManage() {
     const [form, setForm] = useState(emptyForm);
 
     useEffect(() => {
-        fetch('/api/admin/pool').then(r => r.json()).then(d => setPool(d.pool || []));
+        fetch(`${BASE_PATH}/api/admin/pool`).then(r => r.json()).then(d => setPool(d.pool || []));
     }, []);
 
     const handleAddSubmit = (e) => {
@@ -405,12 +406,12 @@ export default function PoolManage() {
                 payload.default_code = '';
             }
 
-            const res = await fetch('/api/admin/pool', {
+            const res = await fetch(`${BASE_PATH}/api/admin/pool`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
             if (res.ok) {
-                const data = await fetch('/api/admin/pool').then(r => r.json());
+                const data = await fetch(`${BASE_PATH}/api/admin/pool`).then(r => r.json());
                 setPool(data.pool || []);
                 setForm(emptyForm);
                 show(`"${form.title}" added to pool!`, 'success');
@@ -420,7 +421,7 @@ export default function PoolManage() {
     };
 
     const doDeleteQuestion = async (qId) => {
-        const res = await fetch(`/api/admin/pool/${qId}`, { method: 'DELETE' });
+        const res = await fetch(`${BASE_PATH}/api/admin/pool/${qId}`, { method: 'DELETE' });
         if (res.ok) { setPool(prev => prev.filter(q => q.id !== qId)); show('Question deleted.', 'info'); }
         else show('Failed to delete question.', 'error');
         setDeleteId(null);
@@ -429,7 +430,7 @@ export default function PoolManage() {
     const doEditQuestion = async (updated) => {
         setSaving(true);
         try {
-            const res = await fetch(`/api/admin/pool/${editQ.id}`, {
+            const res = await fetch(`${BASE_PATH}/api/admin/pool/${editQ.id}`, {
                 method: 'PUT', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...updated, test_cases: updated.test_cases })
             });

@@ -1,4 +1,5 @@
 'use client';
+import { BASE_PATH } from '@/lib/api';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Zap, Lock, User, AlertTriangle, LogIn } from 'lucide-react';
@@ -12,7 +13,7 @@ export default function AdminLogin() {
 
     // Check if already logged in
     useEffect(() => {
-        fetch('/api/auth/me')
+        fetch(`${BASE_PATH}/api/auth/me`)
             .then(r => r.json())
             .then(d => {
                 if (d.admin) {
@@ -30,7 +31,7 @@ export default function AdminLogin() {
         setError('');
         setLoading(true);
         try {
-            const res = await fetch('/api/auth/login', {
+            const res = await fetch(`${BASE_PATH}/api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(form)

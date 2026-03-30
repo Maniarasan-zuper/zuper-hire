@@ -1,4 +1,5 @@
 'use client';
+import { BASE_PATH } from '@/lib/api';
 import { useState, useEffect, useRef, use } from 'react';
 import Editor from '@monaco-editor/react';
 import { useRouter } from 'next/navigation';
@@ -71,7 +72,7 @@ export default function CandidateInterview({ params }) {
 
     useEffect(() => {
         const candidateId = localStorage.getItem('candidateId');
-        fetch(`/api/candidate/questions/${campaignId}?candidateId=${candidateId || ''}`)
+        fetch(`${BASE_PATH}/api/candidate/questions/${campaignId}?candidateId=${candidateId || ''}`)
             .then(res => res.json())
             .then(data => {
                 if (data.questions?.length > 0) {
@@ -85,7 +86,7 @@ export default function CandidateInterview({ params }) {
                 }
             });
 
-        fetch(`/api/admin/campaigns/${campaignId}`)
+        fetch(`${BASE_PATH}/api/admin/campaigns/${campaignId}`)
             .then(res => res.json())
             .then(data => {
                 if (data.campaign) {
@@ -180,7 +181,7 @@ export default function CandidateInterview({ params }) {
         const connectSSE = () => {
             if (sse) sse.close();
             sse = new EventSource(
-                `/api/admin/campaigns/${campaignId}/signal?role=candidate&candidateId=${candidateId}`
+                `${BASE_PATH}/api/admin/campaigns/${campaignId}/signal?role=candidate&candidateId=${candidateId}`
             );
             sseRef.current = sse;
 
@@ -213,7 +214,7 @@ export default function CandidateInterview({ params }) {
 
                     pc.onicecandidate = ({ candidate }) => {
                         if (candidate) {
-                            fetch(`/api/admin/campaigns/${campaignId}/signal`, {
+                            fetch(`${BASE_PATH}/api/admin/campaigns/${campaignId}/signal`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ type: 'ice', candidateId, ice: candidate, from: 'candidate' })
@@ -229,7 +230,7 @@ export default function CandidateInterview({ params }) {
                     const answer = await pc.createAnswer();
                     await pc.setLocalDescription(answer);
 
-                    await fetch(`/api/admin/campaigns/${campaignId}/signal`, {
+                    await fetch(`${BASE_PATH}/api/admin/campaigns/${campaignId}/signal`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ type: 'answer', candidateId, sdp: answer })
@@ -282,7 +283,7 @@ export default function CandidateInterview({ params }) {
 
         const runHeartbeat = async () => {
             try {
-                const res = await fetch('/api/candidate/heartbeat', {
+                const res = await fetch(`${BASE_PATH}/api/candidate/heartbeat`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ candidateId, campaignId, tabSwitches })
@@ -447,7 +448,7 @@ export default function CandidateInterview({ params }) {
         ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
         const imageData = canvas.toDataURL('image/jpeg', 0.4);
-        fetch('/api/candidate/screenshot', {
+        fetch(`${BASE_PATH}/api/candidate/screenshot`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ candidateId, type, imageData, monitorIndex })
@@ -459,7 +460,7 @@ export default function CandidateInterview({ params }) {
         setIsRunning(true);
         setTestResults(null);
         try {
-            const res = await fetch('/api/candidate/run', {
+            const res = await fetch(`${BASE_PATH}/api/candidate/run`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code: currentCode, questionId: currentQuestion.id, candidateId: localStorage.getItem('candidateId') })
@@ -490,7 +491,7 @@ export default function CandidateInterview({ params }) {
                 points_earned = test_cases_total > 0 ? Math.round(maxPts * (test_cases_passed / test_cases_total)) : 0;
             }
 
-            await fetch('/api/candidate/submit', {
+            await fetch(`${BASE_PATH}/api/candidate/submit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -515,7 +516,7 @@ export default function CandidateInterview({ params }) {
         for (const q of questions) {
             if (!submittedSet.has(q.id)) {
                 const code = codeMap[q.id] ?? q.default_code;
-                await fetch('/api/candidate/submit', {
+                await fetch(`${BASE_PATH}/api/candidate/submit`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -528,7 +529,7 @@ export default function CandidateInterview({ params }) {
         }
 
         // Mark as finished in DB
-        await fetch('/api/candidate/finish', {
+        await fetch(`${BASE_PATH}/api/candidate/finish`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ candidateId })
@@ -544,7 +545,7 @@ export default function CandidateInterview({ params }) {
         for (const q of questions) {
             if (!submittedSet.has(q.id)) {
                 const code = codeMap[q.id] ?? q.default_code;
-                await fetch('/api/candidate/submit', {
+                await fetch(`${BASE_PATH}/api/candidate/submit`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -557,7 +558,7 @@ export default function CandidateInterview({ params }) {
         }
 
         // Mark as finished
-        await fetch('/api/candidate/finish', {
+        await fetch(`${BASE_PATH}/api/candidate/finish`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ candidateId })

@@ -1,4 +1,5 @@
 'use client';
+import { BASE_PATH } from '@/lib/api';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Mail, Save, CheckCircle, AlertTriangle, Eye, EyeOff, TestTube, RotateCcw, Camera, Trash2 } from 'lucide-react';
@@ -67,13 +68,13 @@ export default function AdminSettings() {
     const { toasts, show } = useToast();
 
     const loadScreenshotStats = () => {
-        fetch('/api/admin/screenshots/cleanup')
+        fetch(`${BASE_PATH}/api/admin/screenshots/cleanup`)
             .then(r => r.json()).then(setScreenshotStats);
     };
 
     const runCleanup = async () => {
         setCleaning(true);
-        const res = await fetch('/api/admin/screenshots/cleanup', {
+        const res = await fetch(`${BASE_PATH}/api/admin/screenshots/cleanup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ days: cleanupDays })
@@ -87,7 +88,7 @@ export default function AdminSettings() {
     };
 
     useEffect(() => {
-        fetch('/api/admin/settings')
+        fetch(`${BASE_PATH}/api/admin/settings`)
             .then(r => r.json())
             .then(d => {
                 if (d.smtp) setSmtp(d.smtp);
@@ -100,7 +101,7 @@ export default function AdminSettings() {
     const save = async () => {
         setSaving(true);
         try {
-            const res = await fetch('/api/admin/settings', {
+            const res = await fetch(`${BASE_PATH}/api/admin/settings`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ smtp, email_template: template })
@@ -116,7 +117,7 @@ export default function AdminSettings() {
         setSendingTest(true);
         try {
             // Create a dummy test — just send to the test email using the configured SMTP
-            const res = await fetch('/api/admin/settings/test-email', {
+            const res = await fetch(`${BASE_PATH}/api/admin/settings/test-email`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ to: testEmail })
