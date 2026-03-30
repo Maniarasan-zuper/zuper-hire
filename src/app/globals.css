@@ -1456,16 +1456,16 @@ textarea.font-mono {
 }
 
 /* Logo Visibility */
-.light-logo {
+.dark-logo {
   display: none;
 }
 
 [data-theme="light"] .light-logo {
-  display: block;
+  display: none;
 }
 
 [data-theme="light"] .dark-logo {
-  display: none;
+  display: block;
 }
 
 /* Utils */
