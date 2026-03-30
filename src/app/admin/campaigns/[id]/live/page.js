@@ -1,6 +1,5 @@
 'use client';
 import { BASE_PATH } from '@/lib/api';
-import { BASE_PATH } from '@/lib/api';
 import { useState, useEffect, useRef, use } from 'react';
 import Link from 'next/link';
 import {
