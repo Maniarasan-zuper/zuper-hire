@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { BASE_PATH } from '@/lib/api';
 import { Shield, Clock, Code2, BarChart3, Camera, Users, Zap, ExternalLink } from 'lucide-react';
 
 const features = [
